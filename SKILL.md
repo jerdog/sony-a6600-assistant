@@ -2,7 +2,7 @@
 name: sony-a6600-assistant
 description: Helps get the most out of a Sony a6600 mirrorless camera — recommends lens-specific shooting settings, tracks a personal E-mount lens collection, and builds scene-and-lens settings profiles (portrait, action/wildlife, low-light/astro, video, street) tailored to the a6600's APS-C sensor, IBIS, and menu system. Use this whenever the user mentions a Sony lens, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens in their collection, asks what to bring for a shoot, or wants a settings profile for a scenario — even if they don't say "camera skill" explicitly.
 metadata:
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 # Sony a6600 Camera Assistant
