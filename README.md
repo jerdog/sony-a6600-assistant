@@ -12,10 +12,10 @@ A [Claude Skill](https://www.anthropic.com/news/skills) that turns Claude into a
 
 ### claude.ai / Claude app (web, desktop, mobile)
 
-1. Download `sony-a6600-assistant.skill` from this repo (or clone the repo and zip the `sony-a6600-assistant/` folder yourself — see [Repo contents](#repo-contents)).
+1. Download `sony-a6600-assistant.skill` from the [latest release](https://github.com/jerdog/sony-a6600-assistant/releases/latest). A `.zip` of the identical archive is attached to the same release, for upload dialogs that only accept `.zip`.
 2. Open **Settings → Capabilities** and make sure **"Code execution and file creation"** is turned on. Skills require this; if the Skills section is greyed out, this is why.
 3. Go to **Settings → Customize → Skills**.
-4. Tap/click **Add custom skill** and upload `sony-a6600-assistant.skill`. If the upload dialog only accepts `.zip`, rename the file's extension to `.zip` first — it's the same file either way.
+4. Tap/click **Add custom skill** and upload `sony-a6600-assistant.skill`. If the upload dialog only accepts `.zip`, grab the `.zip` asset from the same release instead — it's the same archive under a different extension.
 5. Toggle the skill on.
 
 Skills are tied to your Claude account, not a specific device, so once installed it's available the same way across web, desktop, and mobile without reinstalling anywhere else.
@@ -26,13 +26,13 @@ If you're using Claude Code, Codex, Cursor, or another agent that supports the o
 
 ```bash
 # Install to Claude Code
-npx skills add <your-github-username>/sony-a6600-assistant --agent claude-code
+npx skills add jerdog/sony-a6600-assistant --agent claude-code
 
 # Install to a different agent (see the CLI's docs for supported agents)
-npx skills add <your-github-username>/sony-a6600-assistant --agent codex
+npx skills add jerdog/sony-a6600-assistant --agent codex
 
 # List what's in the repo without installing
-npx skills add <your-github-username>/sony-a6600-assistant --list
+npx skills add jerdog/sony-a6600-assistant --list
 ```
 
 This is a third-party CLI, not an official Anthropic tool — check its repo for the current list of supported agents before relying on it. It writes `SKILL.md`/`references/` into whatever skills directory your chosen agent expects, so no manual copying is needed.
@@ -75,16 +75,24 @@ One difference to know about: the **memory-backed lens collection and saved prof
 ## Repo contents
 
 ```
-sony-a6600-assistant/
-├── SKILL.md                          # Skill definition (Claude Skills format)
+sony-a6600-assistant/                 # repo root — this IS the skill
+├── SKILL.md                          # Skill definition (Claude Skills format); holds the version
 ├── AGENTS.md                         # Tool-agnostic version for other agents
+├── CLAUDE.md                         # Maintainer notes: versioning + release process
+├── README.md                         # This file
+├── LICENSE                           # MIT
 ├── references/
 │   ├── lens-shooting-guide.md        # Advice by lens category
 │   └── settings-profiles.md          # Baseline scene/lens profiles
-└── README.md                         # This file
+└── .github/workflows/
+    └── release.yml                   # Builds and publishes the archive on `v*` tags
 ```
 
-To repackage after making changes, use Anthropic's `skill-creator` packaging script, or simply zip the `sony-a6600-assistant/` folder — a `.skill` file is just a zip archive with that extension.
+## Versioning and releases
+
+The skill's version lives in the `version:` field of `SKILL.md`'s frontmatter, and git tags mirror it as `v<version>`. Pushing a `v*` tag triggers the release workflow, which verifies the tag matches the declared version (failing loudly if they've drifted), builds the archive, and publishes it to the Releases page as both `.skill` and `.zip`.
+
+The published archive contains only `SKILL.md` and `references/`, nested under a `sony-a6600-assistant/` folder — the repo's own docs aren't part of what gets installed. A `.skill` file is just a zip archive with a different extension, so you can also build one by hand from those two paths. See `CLAUDE.md` for the version-bump conventions.
 
 ## License
 

@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify tag matches SKILL.md version
+        id: version
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          skill_version="$(grep -m1 '^version:' SKILL.md | sed 's/^version:[[:space:]]*//' | tr -d '[:space:]')"
+
+          if [ -z "$skill_version" ]; then
+            echo "::error::No 'version:' field found in SKILL.md frontmatter"
+            exit 1
+          fi
+
+          if [ "$skill_version" != "$tag_version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME implies version $tag_version, but SKILL.md declares $skill_version"
+            exit 1
+          fi
+
+          echo "version=$skill_version" >> "$GITHUB_OUTPUT"
+
+      - name: Build skill archive
+        run: |
+          mkdir -p dist/sony-a6600-assistant
+          cp SKILL.md dist/sony-a6600-assistant/
+          cp -R references dist/sony-a6600-assistant/
+          cd dist
+          zip -r sony-a6600-assistant.zip sony-a6600-assistant
+          cp sony-a6600-assistant.zip sony-a6600-assistant.skill
+          unzip -l sony-a6600-assistant.zip
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/sony-a6600-assistant.skill \
+            dist/sony-a6600-assistant.zip \
+            --title "v$VERSION" \
+            --generate-notes
