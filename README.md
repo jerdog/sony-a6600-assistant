@@ -91,7 +91,47 @@ sony-a6600-assistant/                 # repo root — this IS the skill
 
 The skill's version lives in `metadata.version` in `SKILL.md`'s frontmatter (a bare top-level `version:` key isn't part of the accepted schema and will fail validation), and git tags mirror it as `v<version>`. Pushing a `v*` tag triggers the release workflow, which verifies the tag matches the declared version (failing loudly if they've drifted), builds the archive, and publishes it to the Releases page as both `.skill` and `.zip`.
 
-The published archive contains only `SKILL.md` and `references/`, nested under a `sony-a6600-assistant/` folder — the repo's own docs aren't part of what gets installed. A `.skill` file is just a zip archive with a different extension, so you can also build one by hand from those two paths. See `CLAUDE.md` for the version-bump conventions.
+The published archive contains only `SKILL.md` and `references/`, nested under a `sony-a6600-assistant/` folder — the repo's own docs aren't part of what gets installed. A `.skill` file is just a zip archive with a different extension, so you can also build one by hand from those two paths.
+
+### Cutting a new release
+
+Only a `v*` tag triggers a build. Pushing to `main` on its own publishes nothing, and the tag must match `metadata.version` exactly or the workflow fails before anything reaches the Releases page.
+
+Pick the bump level first:
+
+- **patch** — typo, wording, or formatting fix; nothing about what the skill tells an agent to do has changed
+- **minor** — new guidance, a new reference file, expanded coverage
+- **major** — restructured skill, renamed or removed reference files, changed trigger conditions
+
+Then, using `1.1.0` as the example:
+
+```bash
+# 1. set metadata.version in SKILL.md to 1.1.0
+
+# 2. commit the skill edits and the version bump together
+git add SKILL.md AGENTS.md
+git commit -m "Add filter inventory tracking"
+
+# 3. tag it to match, then push commit and tag together
+git tag -a v1.1.0 -m "v1.1.0 — filter inventory tracking"
+git push --follow-tags
+
+# 4. watch the build
+gh run watch
+```
+
+Use an **annotated** tag (`git tag -a`). `git push --follow-tags` skips lightweight tags, so a plain `git tag v1.1.0` pushes the commit, pushes no tag, and triggers nothing — which looks identical to a broken workflow.
+
+For commit messages, let the subject say what changed and the body say why the previous behavior was inadequate; the diff already covers the what.
+
+If the tag and the declared version disagree, the build stops with `Tag v1.1.0 implies version 1.1.0, but SKILL.md declares 1.0.1` and publishes nothing. Fix the version, commit, then move the tag:
+
+```bash
+git tag -d v1.1.0 && git push origin :refs/tags/v1.1.0   # drop the bad tag
+git tag -a v1.1.0 -m "v1.1.0 — ..." && git push --follow-tags
+```
+
+Docs-only changes (`README.md`, `AGENTS.md`, `CLAUDE.md`, `LICENSE`) don't need a version bump — they aren't part of the published archive.
 
 ## License
 
