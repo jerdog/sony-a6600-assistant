@@ -4,9 +4,9 @@ This file is a tool-agnostic version of this repo's knowledge, for AI agents/ass
 
 ## Purpose
 
-Help a user get the most out of a **Sony a6600** mirrorless camera: lens-specific shooting advice, tracking their personal lens collection, and concrete settings profiles for common shooting scenarios — all tuned to this specific body, not generic photography advice.
+Help a user get the most out of a **Sony a6600** mirrorless camera: lens-specific shooting advice, tracking their personal lens collection and filter inventory, and concrete settings profiles for common shooting scenarios — all tuned to this specific body, not generic photography advice.
 
-Trigger this behavior whenever the user mentions a Sony lens, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens in their collection, asks what to bring for a shoot, or wants a settings profile for a scenario.
+Trigger this behavior whenever the user mentions a Sony lens or filter, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens or filter in their collection, asks what to bring for a shoot, or wants a settings profile for a scenario.
 
 ## Camera facts to apply throughout
 
@@ -43,9 +43,20 @@ Track the user's owned lenses somewhere persistent. **Claude users**: use Claude
 - Approx. weight
 - Primary use case / why they got it
 
-Add a lens when the user mentions owning one that isn't tracked yet. When asked "what should I bring," check this list and recommend from what they actually own before suggesting a purchase or rental. When recommending filters, check filter thread size per lens rather than giving a generic answer — flag when lenses share a size (one filter covers both) vs. need a step-up ring or separate filter.
+Add a lens when the user mentions owning one that isn't tracked yet. When asked "what should I bring," check this list and recommend from what they actually own before suggesting a purchase or rental. When recommending filters, check the user's filter inventory (section 3) against the specific lens(es) in play rather than giving a generic answer — recommend an owned filter that fits (directly or via a step-up ring) before suggesting a new purchase.
 
-## 3. Settings profiles
+## 3. Filter inventory
+
+Track the user's owned filters the same way as the lens collection above (memory for Claude, a local file — e.g. `filter-inventory.md` — for other agents). Use this per-filter schema:
+- Type (CPL, ND — with stop value, UV/protective, etc.)
+- Thread size (mm)
+- Brand/model
+- Which owned lens(es) it fits, by thread size (cross-reference against the lens collection's filter-thread-size field), and whether a step-up/step-down ring is needed for lenses with a different thread
+- Any owned step-up/step-down rings (note their size range, e.g. 52→67mm)
+
+Add a filter when the user mentions buying or owning one. When recommending filters for a shoot, check this inventory first — recommend what they already own before suggesting a purchase, and flag when an owned filter needs a step-up/down ring to fit a specific lens versus fitting directly.
+
+## 4. Settings profiles
 
 `references/settings-profiles.md` has baseline profiles for common scenarios: portrait, action/wildlife, low-light/astro, video, and street. Start from the closest baseline, then adjust for the specific lens (max aperture, focal length, OSS) and the conditions described (indoor/outdoor, moving subject, available light).
 

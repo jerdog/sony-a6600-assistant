@@ -1,13 +1,13 @@
 ---
 name: sony-a6600-assistant
-description: Helps get the most out of a Sony a6600 mirrorless camera — recommends lens-specific shooting settings, tracks a personal E-mount lens collection, and builds scene-and-lens settings profiles (portrait, action/wildlife, low-light/astro, video, street) tailored to the a6600's APS-C sensor, IBIS, and menu system. Use this whenever the user mentions a Sony lens, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens in their collection, asks what to bring for a shoot, or wants a settings profile for a scenario — even if they don't say "camera skill" explicitly.
+description: Helps get the most out of a Sony a6600 mirrorless camera — recommends lens-specific shooting settings, tracks a personal E-mount lens collection and filter inventory, and builds scene-and-lens settings profiles (portrait, action/wildlife, low-light/astro, video, street) tailored to the a6600's APS-C sensor, IBIS, and menu system. Use this whenever the user mentions a Sony lens or filter, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens or filter in their collection, asks what to bring for a shoot, or wants a settings profile for a scenario — even if they don't say "camera skill" explicitly.
 metadata:
-  version: 1.0.1
+  version: 1.1.0
 ---
 
 # Sony a6600 Camera Assistant
 
-Helps with three things: lens-specific shooting advice, a personal lens collection, and reusable scene/lens settings profiles — all tuned to the Sony a6600 body specifically.
+Helps with four things: lens-specific shooting advice, a personal lens collection, a filter inventory, and reusable scene/lens settings profiles — all tuned to the Sony a6600 body specifically.
 
 ## Camera facts to apply throughout
 
@@ -44,9 +44,20 @@ Track the user's actual owned lenses in Claude's memory at `/topics/camera-gear.
 - Approx. weight
 - Primary use case / why they got it
 
-When the user mentions a lens they own that isn't in the file yet, add it. When they ask "what should I bring" for a shoot type, read the file and recommend from what they actually own before suggesting anything they'd need to buy or rent. When recommending filters (CPL, ND, etc.), check the filter thread size on the specific lens(es) in play rather than giving a generic recommendation — thread sizes commonly differ across a kit, so flag when lenses share a size (one filter covers both) vs. need a step-up ring or separate filter.
+When the user mentions a lens they own that isn't in the file yet, add it. When they ask "what should I bring" for a shoot type, read the file and recommend from what they actually own before suggesting anything they'd need to buy or rent. When recommending filters (CPL, ND, etc.), check the user's filter inventory (section 3) against the specific lens(es) in play rather than giving a generic recommendation — recommend an owned filter that fits (directly or via a step-up ring) before suggesting a new purchase.
 
-## 3. Settings profiles
+## 3. Filter inventory
+
+Track the user's owned filters in the same memory file, `/topics/camera-gear.md`, under a "Filters" section. Use this per-filter schema:
+- Type (CPL, ND — with stop value, UV/protective, etc.)
+- Thread size (mm)
+- Brand/model
+- Which owned lens(es) it fits, by thread size (cross-reference against the lens collection's filter-thread-size field), and whether a step-up/step-down ring is needed for lenses with a different thread
+- Any owned step-up/step-down rings (note their size range, e.g. 52→67mm)
+
+When the user mentions buying or owning a filter, add it. When recommending filters for a shoot (see section 2), check this inventory first — recommend what they already own before suggesting a purchase, and flag when an owned filter needs a step-up/down ring to fit a specific lens versus fitting directly.
+
+## 4. Settings profiles
 
 `references/settings-profiles.md` has baseline profiles for common scenarios (portrait, action/wildlife, low-light/astro, video, street). Start from the closest baseline, then adjust for the specific lens in play (max aperture, focal length, OSS) and anything the user says about the actual conditions (indoor/outdoor, moving subject, available light).
 
