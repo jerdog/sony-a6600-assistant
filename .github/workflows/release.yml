@@ -18,10 +18,25 @@ jobs:
         id: version
         run: |
           tag_version="${GITHUB_REF_NAME#v}"
-          skill_version="$(grep -m1 '^version:' SKILL.md | sed 's/^version:[[:space:]]*//' | tr -d '[:space:]')"
+
+          # Reads metadata.version from the frontmatter only. The Agent Skills
+          # schema rejects unknown top-level keys, so the version has to live
+          # under metadata rather than at the root.
+          skill_version="$(awk '
+            NR == 1 && $0 == "---" { in_fm = 1; next }
+            in_fm && $0 == "---" { exit }
+            in_fm && /^metadata:/ { in_meta = 1; next }
+            in_fm && in_meta && /^[^[:space:]]/ { in_meta = 0 }
+            in_fm && in_meta && /^[[:space:]]+version:/ {
+              sub(/^[[:space:]]*version:[[:space:]]*/, "")
+              gsub(/["\047[:space:]]/, "")
+              print
+              exit
+            }
+          ' SKILL.md)"
 
           if [ -z "$skill_version" ]; then
-            echo "::error::No 'version:' field found in SKILL.md frontmatter"
+            echo "::error::No 'metadata.version' found in SKILL.md frontmatter"
             exit 1
           fi
 

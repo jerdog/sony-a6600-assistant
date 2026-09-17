@@ -4,9 +4,12 @@ This repo *is* a Claude Skill. The repo root holds `SKILL.md` and `references/` 
 
 ## Versioning
 
-`version:` in the `SKILL.md` frontmatter is the single source of truth. Git tags mirror it as `v<version>`. The release workflow reads both and fails the build if they disagree, so neither can drift silently.
+`metadata.version` in the `SKILL.md` frontmatter is the single source of truth. Git tags mirror it as `v<version>`. The release workflow reads both and fails the build if they disagree, so neither can drift silently.
+
+It lives under `metadata:` rather than at the top level because the Agent Skills schema only permits a known set of root keys — a bare `version:` fails validation. Don't "simplify" it back up a level.
 
 Bump levels:
+
 - **patch** — typo, wording, or formatting fix. Nothing about what the skill tells an agent to do has changed.
 - **minor** — new guidance, a new reference file, expanded coverage.
 - **major** — restructured skill, renamed or removed reference files, changed trigger conditions.
@@ -16,7 +19,8 @@ Bump levels:
 **Whenever `SKILL.md` or anything in `references/` changes, ask whether to cut a new version before treating the work as done.** Recommend a bump level and say why.
 
 If yes:
-1. Update `version:` in the `SKILL.md` frontmatter.
+
+1. Update `metadata.version` in the `SKILL.md` frontmatter.
 2. Commit it together with the skill edits.
 3. `git tag v<version> && git push --follow-tags`
 4. `gh run watch` and report the published release URL.
