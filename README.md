@@ -54,8 +54,7 @@ I just got a Sigma 18-50mm f/2.8. Add it to my lens collection.
 
 What settings should I use for wildlife photography with my 70-350mm?
 
-I'm shooting a wedding indoors — what lens should I bring and what
-settings profile fits?
+I'm shooting a wedding indoors — what lens should I bring and what settings profile fits?
 
 Save that as a named profile.
 ```
@@ -76,7 +75,7 @@ One difference to know about: the **memory-backed lens collection and saved prof
 
 ```
 sony-a6600-assistant/                 # repo root — this IS the skill
-├── SKILL.md                          # Skill definition (Claude Skills format); holds the version
+├── SKILL.md                          # Skill definition (Claude Skills format); metadata.version holds the version
 ├── AGENTS.md                         # Tool-agnostic version for other agents
 ├── CLAUDE.md                         # Maintainer notes: versioning + release process
 ├── README.md                         # This file
@@ -90,7 +89,7 @@ sony-a6600-assistant/                 # repo root — this IS the skill
 
 ## Versioning and releases
 
-The skill's version lives in the `version:` field of `SKILL.md`'s frontmatter, and git tags mirror it as `v<version>`. Pushing a `v*` tag triggers the release workflow, which verifies the tag matches the declared version (failing loudly if they've drifted), builds the archive, and publishes it to the Releases page as both `.skill` and `.zip`.
+The skill's version lives in `metadata.version` in `SKILL.md`'s frontmatter (a bare top-level `version:` key isn't part of the accepted schema and will fail validation), and git tags mirror it as `v<version>`. Pushing a `v*` tag triggers the release workflow, which verifies the tag matches the declared version (failing loudly if they've drifted), builds the archive, and publishes it to the Releases page as both `.skill` and `.zip`.
 
 The published archive contains only `SKILL.md` and `references/`, nested under a `sony-a6600-assistant/` folder — the repo's own docs aren't part of what gets installed. A `.skill` file is just a zip archive with a different extension, so you can also build one by hand from those two paths. See `CLAUDE.md` for the version-bump conventions.
 

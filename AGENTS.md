@@ -34,19 +34,16 @@ See `references/lens-shooting-guide.md` for category-specific detail: fast prime
 ## 2. Personal lens collection
 
 Track the user's owned lenses somewhere persistent. **Claude users**: use Claude's memory feature (see `SKILL.md` for the exact approach). **Other agents**: if you don't have an equivalent persistent memory system, maintain a simple local file instead, e.g. `lens-collection.md` in the user's project or notes directory, with one entry per lens:
-
-```
 - Name / model
-- Mount (should be E-mount for the a6600; note if it needs an adapter,
-  and whether that adapter is electronic or manual-only)
+- Mount (should be E-mount for the a6600; note if it needs an adapter, and whether that adapter is electronic or manual-only)
 - Focal length (and full-frame equivalent)
 - Max aperture
 - Has OSS: yes/no
+- Filter thread size (mm) — useful for picking CPL/ND filters that fit
 - Approx. weight
 - Primary use case / why they got it
-```
 
-Add a lens when the user mentions owning one that isn't tracked yet. When asked "what should I bring," check this list and recommend from what they actually own before suggesting a purchase or rental.
+Add a lens when the user mentions owning one that isn't tracked yet. When asked "what should I bring," check this list and recommend from what they actually own before suggesting a purchase or rental. When recommending filters, check filter thread size per lens rather than giving a generic answer — flag when lenses share a size (one filter covers both) vs. need a step-up ring or separate filter.
 
 ## 3. Settings profiles
 
