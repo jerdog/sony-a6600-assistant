@@ -1,13 +1,13 @@
 ---
 name: sony-a6600-assistant
-description: Helps get the most out of a Sony a6600 mirrorless camera — recommends lens-specific shooting settings, tracks a personal E-mount lens collection and filter inventory, and builds scene-and-lens settings profiles (portrait, action/wildlife, low-light/astro, video, street) tailored to the a6600's APS-C sensor, IBIS, and menu system. Use this whenever the user mentions a Sony lens or filter, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens or filter in their collection, asks what to bring for a shoot, or wants a settings profile for a scenario — even if they don't say "camera skill" explicitly.
+description: Helps get the most out of a Sony a6600 mirrorless camera — recommends lens-specific shooting settings, tracks a personal E-mount lens collection and filter inventory, builds scene-and-lens settings profiles (portrait, action/wildlife, low-light/astro, video, street), and exports those as Lightroom develop presets (.xmp) and Sony Picture Profile/menu-settings cheat sheets. Use this whenever the user mentions a Sony lens or filter, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens or filter in their collection, asks what to bring for a shoot, wants a settings profile for a scenario, or asks to export/download a Lightroom preset or Picture Profile — even if they don't say "camera skill" explicitly.
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Sony a6600 Camera Assistant
 
-Helps with four things: lens-specific shooting advice, a personal lens collection, a filter inventory, and reusable scene/lens settings profiles — all tuned to the Sony a6600 body specifically.
+Helps with five things: lens-specific shooting advice, a personal lens collection, a filter inventory, reusable scene/lens settings profiles, and exporting those profiles as Lightroom develop presets and Sony Picture Profile/menu cheat sheets — all tuned to the Sony a6600 body specifically.
 
 ## Camera facts to apply throughout
 
@@ -62,6 +62,16 @@ When the user mentions buying or owning a filter, add it. When recommending filt
 `references/settings-profiles.md` has baseline profiles for common scenarios (portrait, action/wildlife, low-light/astro, video, street). Start from the closest baseline, then adjust for the specific lens in play (max aperture, focal length, OSS) and anything the user says about the actual conditions (indoor/outdoor, moving subject, available light).
 
 If the user wants a profile saved for reuse, add or update it in `references/settings-profiles.md` directly rather than just answering inline — but note that if this skill was installed from a `.skill` file, its bundled files may be read-only; in that case fall back to keeping the custom profile in `/topics/camera-gear.md` under a "Settings profiles" section instead.
+
+## 5. Lightroom presets & Sony Picture Profile export
+
+Two distinct exports, triggered separately:
+
+**Lightroom develop preset (.xmp)** — when the user asks to export, save, or download a Lightroom preset for a scenario/lens profile, read `references/lightroom-xmp-template.md` and generate an actual `.xmp` file with develop-module values (white balance feel, exposure, tone, clarity, dehaze, color) that match the scenario's mood — this is a post-processing/grading export, separate from camera capture settings. Also give a short written summary of what the preset does in plain English alongside the file. Make clear to the user that this affects editing in Lightroom, not anything in-camera.
+
+**Sony Picture Profile / menu cheat sheet** — when the user asks about Picture Profiles, color/tone science for video, or wants a menu-settings cheat sheet to manually replicate a profile on the camera, read `references/sony-picture-profiles.md`. Recommend a Picture Profile (PP1-PP10) where relevant (mainly for video or JPEG shooting — flag that Picture Profile doesn't affect RAW data), and/or produce a menu-path-by-menu-path checklist restating the given settings profile's values in navigable form. The camera's own Save/Load Settings feature writes a proprietary file this skill cannot generate — the cheat sheet is the practical substitute.
+
+If the user wants either export saved for reuse, persist the generated values (not the binary/XML file itself) in `/topics/camera-gear.md` under a "Lightroom presets" or "Picture Profiles" section, the same way custom settings profiles are kept, so the file can be regenerated on request without re-deriving the values.
 
 ## Answering style
 

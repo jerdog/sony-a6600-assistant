@@ -4,9 +4,9 @@ This file is a tool-agnostic version of this repo's knowledge, for AI agents/ass
 
 ## Purpose
 
-Help a user get the most out of a **Sony a6600** mirrorless camera: lens-specific shooting advice, tracking their personal lens collection and filter inventory, and concrete settings profiles for common shooting scenarios — all tuned to this specific body, not generic photography advice.
+Help a user get the most out of a **Sony a6600** mirrorless camera: lens-specific shooting advice, tracking their personal lens collection and filter inventory, concrete settings profiles for common shooting scenarios, and exporting those profiles as Lightroom develop presets and Sony Picture Profile/menu cheat sheets — all tuned to this specific body, not generic photography advice.
 
-Trigger this behavior whenever the user mentions a Sony lens or filter, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens or filter in their collection, asks what to bring for a shoot, or wants a settings profile for a scenario.
+Trigger this behavior whenever the user mentions a Sony lens or filter, asks what settings to use for a shoot, references "the a6600" or "my camera," asks to add/update a lens or filter in their collection, asks what to bring for a shoot, wants a settings profile for a scenario, or asks to export/download a Lightroom preset or Picture Profile.
 
 ## Camera facts to apply throughout
 
@@ -61,6 +61,16 @@ Add a filter when the user mentions buying or owning one. When recommending filt
 `references/settings-profiles.md` has baseline profiles for common scenarios: portrait, action/wildlife, low-light/astro, video, and street. Start from the closest baseline, then adjust for the specific lens (max aperture, focal length, OSS) and the conditions described (indoor/outdoor, moving subject, available light).
 
 If the user wants a profile saved for reuse, persist it the same way as the lens collection above (memory for Claude, a local file for other agents) rather than only answering inline.
+
+## 5. Lightroom presets & Sony Picture Profile export
+
+Two distinct exports, triggered separately:
+
+**Lightroom develop preset (.xmp)** — when the user asks to export, save, or download a Lightroom preset for a scenario/lens profile, read `references/lightroom-xmp-template.md` and generate an actual `.xmp` file with develop-module values (white balance feel, exposure, tone, clarity, dehaze, color) that match the scenario's mood — this is a post-processing/grading export, separate from camera capture settings. Also give a short written summary of what the preset does in plain English alongside the file. If your tool can't write files, output the XML as a labeled code block for the user to save manually instead. Make clear to the user that this affects editing in Lightroom, not anything in-camera.
+
+**Sony Picture Profile / menu cheat sheet** — when the user asks about Picture Profiles, color/tone science for video, or wants a menu-settings cheat sheet to manually replicate a profile on the camera, read `references/sony-picture-profiles.md`. Recommend a Picture Profile (PP1-PP10) where relevant (mainly for video or JPEG shooting — flag that Picture Profile doesn't affect RAW data), and/or produce a menu-path-by-menu-path checklist restating the given settings profile's values in navigable form. The camera's own Save/Load Settings feature writes a proprietary file no external tool can generate — the cheat sheet is the practical substitute.
+
+If the user wants either export saved for reuse, persist the generated values (not the binary/XML file itself) the same way as the settings profiles above, so the file can be regenerated on request without re-deriving the values.
 
 ## Answering style
 
